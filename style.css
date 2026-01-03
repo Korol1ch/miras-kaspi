@@ -34,6 +34,7 @@
 		background: white;
 		border-bottom: 0.35vh solid #d9d9d9;
 		top: 0;
+		z-index: 1;
 
 		display: flex;
 		justify-content: center;
