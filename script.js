@@ -5,7 +5,7 @@ const section = document.getElementById("section")
 btn2.addEventListener('click', () => {
   section.style.display = 'block'
   btn2.style.background = 'white'
-  btn1.style.background = '#d3d3d3'
+  btn1.style.background = '#d9d9d9'
   btn2.style.zIndex = '1'
   btn1.style.zIndex = '0'
 })
@@ -13,7 +13,7 @@ btn2.addEventListener('click', () => {
 btn1.addEventListener('click', () => {
   section.style.display = 'none'
   btn1.style.background = 'white'
-  btn2.style.background = '#d3d3d3'
+  btn2.style.background = '#d9d9d9'
   btn1.style.zIndex = '1'
   btn2.style.zIndex = '0'
 })
@@ -73,42 +73,44 @@ footerBtn1.addEventListener("click", () => {
 const footerBtn2 = document.getElementById("footerBtn2");
 
 footerBtn2.addEventListener("click", async () => {
-  if (navigator.canShare && navigator.canShare({ files: [] })) {
+  if (navigator.share && navigator.canShare) {
     try {
-      // Загружаем файлы из папки img
-      const image2 = await fetch('img/image 2.png').then(r => r.blob());
-      const image3 = await fetch('img/image 3.png').then(r => r.blob());
+      // путь к PDF (должен быть доступен по URL)
+      const response = await fetch("090124552135-20251219143643327.pdf");
+      const blob = await response.blob();
+      const file = new File([blob], "example.pdf", {
+        type: "application/pdf"
+      });
 
-      const filesArray = [
-        new File([image2], 'image 2.png', { type: image2.type }),
-        new File([image3], 'image 3.png', { type: image3.type })
-      ];
-
-      if (navigator.canShare({ files: filesArray })) {
+      if (navigator.canShare({ files: [file] })) {
         await navigator.share({
-          files: filesArray,
-          title: 'Документы',
-          text: 'Смотри изображения документов'
+          title: "Поделиться PDF",
+          files: [file]
         });
-        console.log('Изображения успешно отправлены!');
+        console.log("PDF успешно отправлен!");
       } else {
-        alert('Ваше устройство не поддерживает шаринг файлов.');
+        alert("Ваш браузер не поддерживает отправку файлов");
       }
-
     } catch (err) {
-      console.error('Ошибка при шаринге:', err);
+      console.error("Ошибка при шаринге PDF:", err);
     }
   } else {
-    alert('Ваш браузер не поддерживает Web Share API для файлов.');
+    alert("Ваш браузер не поддерживает Web Share API");
   }
 });
+
+
 
 
 
 const footerBtn3 = document.getElementById("footerBtn3");
 
 // Текст для шаринга
-const shareText = "Здесь вставь свой текст, который хочешь поделиться!";
+const shareText = "Мұрат Мирас Манасұлы"
+                  "040124552135"
+                  "24.01.2004"
+                  "16.10.2020"
+                  "17.10.2030";
 
 footerBtn3.addEventListener("click", async () => {
   if (navigator.share) {
