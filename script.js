@@ -129,3 +129,38 @@ footerBtn3.addEventListener("click", async () => {
 });
 
 
+const zoomArea = document.querySelector('.con-section');
+
+let scale = 1;
+let startDistance = 0;
+
+zoomArea.addEventListener('touchstart', e => {
+  if (e.touches.length === 2) {
+    startDistance = getDistance(e.touches[0], e.touches[1]);
+  }
+}, { passive: false });
+
+zoomArea.addEventListener('touchmove', e => {
+  if (e.touches.length === 2) {
+    e.preventDefault();
+
+    const newDistance = getDistance(e.touches[0], e.touches[1]);
+    scale *= newDistance / startDistance;
+    scale = Math.min(Math.max(scale, 1), 3);
+
+    zoomArea.style.transform = `scale(${scale})`;
+    zoomArea.style.transformOrigin = 'center center';
+
+    startDistance = newDistance;
+  }
+}, { passive: false });
+
+function getDistance(t1, t2) {
+  return Math.hypot(
+    t2.clientX - t1.clientX,
+    t2.clientY - t1.clientY
+  );
+}
+
+
+
