@@ -133,10 +133,17 @@ const zoomArea = document.querySelector('.con-section');
 
 let scale = 1;
 let startDistance = 0;
+let originX = 0;
+let originY = 0;
 
 zoomArea.addEventListener('touchstart', e => {
   if (e.touches.length === 2) {
     startDistance = getDistance(e.touches[0], e.touches[1]);
+    
+    // Находим середину между пальцами
+    const rect = zoomArea.getBoundingClientRect();
+    originX = ((e.touches[0].clientX + e.touches[1].clientX) / 2) - rect.left;
+    originY = ((e.touches[0].clientY + e.touches[1].clientY) / 2) - rect.top;
   }
 }, { passive: false });
 
@@ -146,10 +153,11 @@ zoomArea.addEventListener('touchmove', e => {
 
     const newDistance = getDistance(e.touches[0], e.touches[1]);
     scale *= newDistance / startDistance;
-    scale = Math.min(Math.max(scale, 1), 3);
+    scale = Math.min(Math.max(scale, 1), 5); // ограничение масштаба
 
+    // Используем origin пальцев для transform
+    zoomArea.style.transformOrigin = `${originX}px ${originY}px`;
     zoomArea.style.transform = `scale(${scale})`;
-    zoomArea.style.transformOrigin = 'center center';
 
     startDistance = newDistance;
   }
